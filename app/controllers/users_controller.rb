@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy]
+
+  before_action :authorize_request, except: :create
+  before_action :find_user, except: %i[create index]
 
   # GET /users
   def index
@@ -15,6 +17,9 @@ class UsersController < ApplicationController
 
   # POST /users
   def create
+    puts "SSSSS"
+    puts params
+  
     @user = User.new(user_params)
 
     if @user.save
@@ -46,6 +51,6 @@ class UsersController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def user_params
-      params.require(:user).permit(:fullname, :phone, :email, :password_digest)
+      params.require(:user).permit(:fullname, :phone, :email, :password, :password_confirmation)
     end
 end
