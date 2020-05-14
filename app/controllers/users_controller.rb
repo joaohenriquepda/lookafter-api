@@ -17,9 +17,7 @@ class UsersController < ApplicationController
 
   # POST /users
   def create
-    puts "SSSSS"
-    puts params
-  
+ 
     @user = User.new(user_params)
 
     if @user.save
@@ -44,10 +42,11 @@ class UsersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params[:id])
-    end
+      def find_user
+        @user = User.find(params[:id])
+        rescue ActiveRecord::RecordNotFound
+          render json: { errors: 'User not found' }, status: :not_found
+      end
 
     # Only allow a trusted parameter "white list" through.
     def user_params
